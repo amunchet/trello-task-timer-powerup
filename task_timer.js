@@ -4,8 +4,10 @@ window.TrelloPowerUp.initialize({
       .then(card => {
         return card.checklists.map(cl => ({
           dynamic: function () {
+            console.log("Calling dynamic function for checklist:", cl.name);
             return t.get('card', 'shared', 'checklistTimers')
               .then(timers => {
+                console.log("Current timers:", timers);
                 timers = timers || {};
                 const now = Date.now();
                 const state = timers[cl.id];

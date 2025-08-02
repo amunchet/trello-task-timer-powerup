@@ -36,7 +36,7 @@
       const timers = await t.get('card', 'shared', 'checklistTimers') || {};
       timers[checklistId] = { startTime };
       await t.set('card', 'shared', 'checklistTimers', timers);
-      runTimer();
+      runTimer(timers);
     };
 
     document.getElementById('stop').onclick = async () => {
@@ -47,7 +47,7 @@
       document.getElementById('timer').textContent = '25:00';
     };
 
-    async function runTimer() {
+    async function runTimer(timers) {
       clearInterval(interval);
       interval = setInterval(async () => {
         await t.set('card', 'shared', 'checklistTimers', timers);

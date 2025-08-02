@@ -6,6 +6,8 @@
 // @author       You
 // @match        https://trello.com/c/*
 // @grant        GM_xmlhttpRequest
+// @updateURL    https://github.com/amunchet/trello-task-timer-powerup/raw/refs/heads/master/tampermonkey/trello-checklist-timer-tasks.user.js
+// @downloadURL  https://github.com/amunchet/trello-task-timer-powerup/raw/refs/heads/master/tampermonkey/trello-checklist-timer-tasks.user.js
 // ==/UserScript==
 
 (function () {

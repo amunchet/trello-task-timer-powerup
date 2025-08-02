@@ -23,10 +23,13 @@
   <script>
     const t = TrelloPowerUp.iframe();
     let interval, checklistId, startTime;
-
+    console.log(t.arg)
+    /*
     t.arg('checklistId').then(id => {
       checklistId = id;
     });
+    */
+    checklistId = t.arg('checklistId');
 
     document.getElementById('start').onclick = async () => {
       startTime = Date.now();

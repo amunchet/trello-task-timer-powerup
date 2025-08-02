@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Trello Checklist Timer
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.0.1
 // @description  Adds Timer functionality to each checklist header on Trello cards
 // @author       You
 // @match        https://trello.com/c/*

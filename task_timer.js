@@ -1,3 +1,5 @@
+setTimeout(()=>{
+  console.log("initing....")
 window.TrelloPowerUp.initialize({
   'card-detail-badges': function (t) {
     return t.card('checklists')
@@ -24,7 +26,7 @@ window.TrelloPowerUp.initialize({
                     ? `${minutes}:${seconds.toString().padStart(2, '0')}`
                     : 'Start 25:00',
                   color: timeLeft ? 'green' : 'blue',
-                  refresh: 10, // minimum allowed by Trello
+                  //refresh: 10, // minimum allowed by Trello
 
                 };
               });
@@ -42,4 +44,4 @@ window.TrelloPowerUp.initialize({
       });
   }
 })
-
+}, 1000)

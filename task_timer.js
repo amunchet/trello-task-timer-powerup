@@ -25,7 +25,7 @@ window.TrelloPowerUp.initialize({
                     : 'Start 25:00',
                   color: timeLeft ? 'green' : 'blue',
                   refresh: 10, // minimum allowed by Trello
-                  callback: function () {
+                  callback: () => {
                     return t.popup({
                       title: `Task Timer for ${cl.name}`,
                       url: './popup.html',

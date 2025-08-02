@@ -49,8 +49,10 @@
 
     async function runTimer(timers) {
       clearInterval(interval);
-      interval = setInterval(async () => {
+      interval = setInterval(async (timers) => {
         await t.set('card', 'shared', 'checklistTimers', timers);
+        console.log("Running inside timers..")
+        console.log(timers)
         const elapsed = Math.floor((Date.now() - startTime) / 1000);
         const left = Math.max(0, 25 * 60 - elapsed);
         const m = Math.floor(left / 60);

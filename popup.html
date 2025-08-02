@@ -47,9 +47,10 @@
       document.getElementById('timer').textContent = '25:00';
     };
 
-    function runTimer() {
+    async function runTimer() {
       clearInterval(interval);
-      interval = setInterval(() => {
+      interval = setInterval(async () => {
+        await t.set('card', 'shared', 'checklistTimers', timers);
         const elapsed = Math.floor((Date.now() - startTime) / 1000);
         const left = Math.max(0, 25 * 60 - elapsed);
         const m = Math.floor(left / 60);

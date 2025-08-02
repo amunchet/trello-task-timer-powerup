@@ -14,6 +14,7 @@ window.TrelloPowerUp.initialize({
         title: `Task Timer: ${cl.name}`,
         text: timeLeft ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Start 25:00',
         color: timeLeft ? 'green' : 'blue',
+        refresh: 1, // ⏱️ Trigger refresh every 10 seconds while the card is open
         callback: t => t.popup({
           title: `Task Timer for ${cl.name}`,
           url: './popup.html',

@@ -1,4 +1,4 @@
-setTimeout(()=>{
+setInterval(() => {
   console.log("initing....")
 window.TrelloPowerUp.initialize({
   'card-detail-badges': function (t) {

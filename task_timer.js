@@ -25,18 +25,21 @@ window.TrelloPowerUp.initialize({
                     : 'Start 25:00',
                   color: timeLeft ? 'green' : 'blue',
                   refresh: 10, // minimum allowed by Trello
-                  callback: () => {
-                    return t.popup({
-                      title: `Task Timer for ${cl.name}`,
-                      url: './popup.html',
-                      height: 160,
-                      args: { checklistId: cl.id }
-                    });
-                  }
+
                 };
               });
+          },
+          callback: () => {
+            console.log("Opening popup for checklist:", cl.name);
+            return t.popup({
+              title: `Task Timer for ${cl.name}`,
+              url: './popup.html',
+              height: 160,
+              args: { checklistId: cl.id }
+            });
           }
         }));
       });
   }
-});
+})
+

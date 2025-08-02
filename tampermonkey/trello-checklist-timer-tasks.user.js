@@ -19,11 +19,36 @@
     const style = document.createElement('style');
     style.textContent = `
 @keyframes flashGreen {
-  0%   { background-color: #0aa105ff; }
-  100% { background-color: #f4f5f7; }
+  0%   { background-color: #0aa105ff; color: white; }
+  100% { background-color: #f4f5f7; color: black; }
 }
 .timer-flash {
   animation: flashGreen 2s ease-in-out forwards;
+}
+  .timer-running {
+  background-color: #cde4ff !important; /* soft blue */
+}
+
+/* 🎆 Firework-style celebration */
+@keyframes burst {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50px) scale(1.2);
+  }
+}
+.confetti {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: red;
+  opacity: 0;
+  animation: burst 0.6s ease-out forwards;
+  border-radius: 50%;
+  pointer-events: none;
 }
 `;
     document.head.appendChild(style);
@@ -72,9 +97,11 @@
             timerWrapper.style.justifyContent = 'space-between';
             timerWrapper.style.alignItems = 'center';
             timerWrapper.style.margin = '8px 0';
-            timerWrapper.style.padding = '4px 8px';
+            timerWrapper.style.padding = '8px 8px';
             timerWrapper.style.background = '#f4f5f7';
-            timerWrapper.style.borderRadius = '4px';
+            timerWrapper.style.borderRadius = '0.33rem';
+            timerWrapper.style.position = 'relative';
+            timerWrapper.style.overflow = 'visible';
 
             // Left: button + timer
             const leftSection = document.createElement('div');
@@ -87,7 +114,7 @@
             //button.style.fontSize = '0.8em';
             button.style.fontWeight = '500';
             button.style.backgroundColor = 'white';
-            button.style.borderRadius = '0.5rem';
+            button.style.borderRadius = '0.25rem';
             button.style.borderWidth = '2px';
             button.style.borderColor = 'lightgrey';
             button.style.boxShadow = 'none !important';
@@ -124,6 +151,7 @@
             button.onclick = () => {
                 if (timerId) {
                     clearInterval(timerId);
+                    timerWrapper.classList.remove('timer-running');
                     timerId = null;
                     timerDisplay.textContent = '';
                     button.textContent = '🍅 Start Timer';
@@ -139,11 +167,13 @@
 
                     endTime = Date.now() + durationMs;
                     button.textContent = '⏹ Stop Timer';
+                    timerWrapper.classList.add('timer-running');
 
                     timerId = setInterval(() => {
                         const remaining = endTime - Date.now();
                         if (remaining <= 0) {
                             clearInterval(timerId);
+                            timerWrapper.classList.remove('timer-running');
                             timerId = null;
 
 
@@ -151,6 +181,24 @@
                             timerDisplay.textContent = '🎉 Done!';
                             button.textContent = '🍅 Start Timer';
                             playMusic();
+
+                            for (let i = 0; i < 15; i++) {
+                                const confetti = document.createElement('div');
+                                confetti.className = 'confetti';
+                                confetti.style.background = ['#FF3CAC', '#784BA0', '#2B86C5', '#f9c80e', '#f86624'][i % 5];
+                                confetti.style.left = `${Math.random() * 100}%`;
+                                confetti.style.bottom = '0'; // start at bottom of the wrapper
+                                confetti.style.zIndex = '10';
+                                confetti.style.animationDelay = `${i * 50}ms`;
+
+                                // slight randomness for more natural spread
+                                confetti.style.transform = `translateX(${(Math.random() - 0.5) * 30}px) scale(${Math.random() * 0.7 + 0.7})`;
+
+                                timerWrapper.appendChild(confetti);
+
+                                setTimeout(() => confetti.remove(), 800); // remove after animation
+                            }
+
 
                             // Flash the wrapper green
                             timerWrapper.classList.add('timer-flash');

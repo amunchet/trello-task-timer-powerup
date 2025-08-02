@@ -9,12 +9,15 @@ window.TrelloPowerUp.initialize({
       const timeLeft = state ? Math.max(0, Math.ceil((state.startTime + 25 * 60 * 1000 - now) / 1000)) : null;
       const minutes = Math.floor(timeLeft / 60);
       const seconds = timeLeft % 60;
-
+      setInterval(async()=>{
+        await t.get("card", "shared", "checklistTimers")
+        console.log("Timer updated for checklist:", cl.name);
+      }, 1000)
       return {
         title: `Task Timer: ${cl.name}`,
         text: timeLeft ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Start 25:00',
         color: timeLeft ? 'green' : 'blue',
-        refresh: 1, // ⏱️ Trigger refresh every 10 seconds while the card is open
+        refresh: 1, // ⏱️ Trigger refresh every 1 second while the card is open
         callback: t => t.popup({
           title: `Task Timer for ${cl.name}`,
           url: './popup.html',

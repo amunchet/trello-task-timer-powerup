@@ -49,7 +49,7 @@
 
     async function runTimer(timers) {
       clearInterval(interval);
-      interval = setInterval(async (timers) => {
+      interval = setInterval(async () => {
         await t.set('card', 'shared', 'checklistTimers', timers);
         console.log("Running inside timers..")
         console.log(timers)

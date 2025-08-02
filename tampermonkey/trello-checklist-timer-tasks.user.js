@@ -23,62 +23,70 @@
     return `${min}:${sec}`;
   }
 
-  function insertTimerButtons() {
-    document.querySelectorAll(checklistSelector).forEach((header, index) => {
-      if (header.dataset.hasTimer) return; // prevent duplicates
-      header.dataset.hasTimer = 'true';
+function insertTimerButtons() {
+  document.querySelectorAll('[data-testid="checklist-container"]').forEach((container, index) => {
+    if (container.dataset.hasPomodoroTimer) return;
+    container.dataset.hasPomodoroTimer = 'true';
 
-      const titleContainer = header.querySelector('[data-testid="checklist-title-container"]');
+    // Create wrapper
+    const timerWrapper = document.createElement('div');
+    timerWrapper.style.display = 'flex';
+    timerWrapper.style.alignItems = 'center';
+    timerWrapper.style.gap = '8px';
+    timerWrapper.style.margin = '8px 0';
+    timerWrapper.style.padding = '4px 8px';
+    timerWrapper.style.background = '#f4f5f7';
+    timerWrapper.style.borderRadius = '4px';
 
-      // Create timer display
-      const timerDisplay = document.createElement('div');
-      timerDisplay.textContent = '';
-      timerDisplay.style.fontSize = '0.9em';
-      timerDisplay.style.marginTop = '4px';
+    // Button
+    const button = document.createElement('button');
+    button.textContent = '🍅 Start Pomodoro';
+    button.style.fontSize = '0.8em';
 
-      // Create start/stop button
-      const button = document.createElement('button');
-      button.textContent = '🍅 Start Pomodoro';
-      button.style.marginLeft = '8px';
-      button.style.fontSize = '0.8em';
+    // Timer display
+    const timerDisplay = document.createElement('span');
+    timerDisplay.textContent = '';
+    timerDisplay.style.fontSize = '0.9em';
 
-      let timerId = null;
-      let endTime = null;
+    timerWrapper.appendChild(button);
+    timerWrapper.appendChild(timerDisplay);
 
-      button.onclick = () => {
-        if (timerId) {
-          clearInterval(timerId);
-          timerId = null;
-          endTime = null;
-          timerDisplay.textContent = '';
-          button.textContent = '🍅 Start Pomodoro';
-        } else {
-          endTime = Date.now() + TIMER_DURATION_MS;
-          timerDisplay.textContent = formatTime(TIMER_DURATION_MS);
-          button.textContent = '⏹ Stop Timer';
+    // Insert above the entire checklist container
+    container.parentElement.insertBefore(timerWrapper, container);
 
-          timerId = setInterval(() => {
-            const remaining = endTime - Date.now();
-            if (remaining <= 0) {
-              clearInterval(timerId);
-              timerId = null;
-              timerDisplay.textContent = '🎉 Done!';
-              button.textContent = '🍅 Start Pomodoro';
-              // Optional: play a sound
-              const audio = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg');
-              audio.play();
-            } else {
-              timerDisplay.textContent = formatTime(remaining);
-            }
-          }, 1000);
-        }
-      };
+    let timerId = null;
+    let endTime = null;
 
-      // Append to header
-      titleContainer.appendChild(button);
-      titleContainer.appendChild(timerDisplay);
-    });
-  }
+    button.onclick = () => {
+      if (timerId) {
+        clearInterval(timerId);
+        timerId = null;
+        timerDisplay.textContent = '';
+        button.textContent = '🍅 Start Pomodoro';
+      } else {
+        endTime = Date.now() + 25 * 60 * 1000; // 25 mins
+        button.textContent = '⏹ Stop Timer';
+
+        timerId = setInterval(() => {
+          const remaining = endTime - Date.now();
+          if (remaining <= 0) {
+            clearInterval(timerId);
+            timerId = null;
+            timerDisplay.textContent = '🎉 Done!';
+            button.textContent = '🍅 Start Pomodoro';
+            const audio = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg');
+            audio.play();
+          } else {
+            const mins = Math.floor(remaining / 60000);
+            const secs = Math.floor((remaining % 60000) / 1000).toString().padStart(2, '0');
+            timerDisplay.textContent = `⏳ ${mins}:${secs}`;
+          }
+        }, 1000);
+      }
+    };
+  });
+}
+
 
   // Initial injection
   setInterval(insertTimerButtons, 1000); // repeat in case Trello re-renders

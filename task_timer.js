@@ -23,6 +23,7 @@ window.TrelloPowerUp.initialize({
       };
     });
 
+    console.log("HERE IN TASK TIMER!")
     return badges;
   }
 });

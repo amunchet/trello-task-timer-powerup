@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task Timer</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin: 1em; }
+    #timer { font-size: 2em; margin: 0.5em 0; }
+    .done { animation: pulse 1s ease-in-out; background-color: #c3f784; }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div id="timer">25:00</div>
+  <button id="start">Start</button>
+  <button id="stop">Stop</button>
+  <audio id="ding" src="./ding.mp3" preload="auto"></audio>
+
+  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  <script>
+    const t = TrelloPowerUp.iframe();
+    let interval, checklistId, startTime;
+
+    t.arg('checklistId').then(id => {
+      checklistId = id;
+    });
+
+    document.getElementById('start').onclick = async () => {
+      startTime = Date.now();
+      const timers = await t.get('card', 'shared', 'checklistTimers') || {};
+      timers[checklistId] = { startTime };
+      await t.set('card', 'shared', 'checklistTimers', timers);
+      runTimer();
+    };
+
+    document.getElementById('stop').onclick = async () => {
+      const timers = await t.get('card', 'shared', 'checklistTimers') || {};
+      delete timers[checklistId];
+      await t.set('card', 'shared', 'checklistTimers', timers);
+      clearInterval(interval);
+      document.getElementById('timer').textContent = '25:00';
+    };
+
+    function runTimer() {
+      clearInterval(interval);
+      interval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const left = Math.max(0, 25 * 60 - elapsed);
+        const m = Math.floor(left / 60);
+        const s = (left % 60).toString().padStart(2, '0');
+        document.getElementById('timer').textContent = `${m}:${s}`;
+
+        if (left === 0) {
+          clearInterval(interval);
+          document.getElementById('ding').play();
+          document.body.classList.add('done');
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

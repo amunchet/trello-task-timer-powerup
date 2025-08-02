@@ -1,0 +1,20 @@
+{
+  "name": "Task Timer Checklist Power-Up",
+  "description": "Adds task timers to each checklist.",
+  "author": "Chester Enright",
+  "version": "0.1",
+  "capabilities": {
+    "card-detail-badges": {
+      "url": "./task_timer.js"
+    },
+    "show-settings": {
+      "url": "./index.html"
+    }
+  },
+  "icon": {
+    "url": "https://cdn-icons-png.flaticon.com/512/2937/2937768.png"
+  },
+  "authorization": {
+    "type": "none"
+  }
+}

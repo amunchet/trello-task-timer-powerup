@@ -1,5 +1,7 @@
 # Trello Task Timer
+The Tampermonkey script worked out way better than using the Trello Power up.
 
+The trello power up is locked down.  There's some strangeness with iframes as well.  Tampermonkey is much more flexible.
 
 ## Thanks
 
